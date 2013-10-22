@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+    <!-- example usage -->
+    <!--
+    <Match>
+        <Class name="com.yammer.chesster.service.resources.ChessterResource"/>
+        <Bug code="RV"/>
+    </Match>
+    -->
+</FindBugsFilter>
