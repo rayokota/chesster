@@ -3,6 +3,7 @@ package com.yammer.chesster.service;
 import com.bazaarvoice.dropwizard.assets.ConfiguredAssetsBundle;
 
 import com.yammer.chesster.service.resources.GameResource;
+import com.yammer.chesster.service.store.GameStore;
 import com.yammer.dropwizard.config.Bootstrap;
 import com.yammer.dropwizard.config.Environment;
 import com.yammer.dropwizard.views.ViewBundle;
@@ -37,7 +38,7 @@ public class ChessterService extends Service<ChessterConfiguration> {
     @Override
     public void run(final ChessterConfiguration config, Environment environment) throws Exception {
         //environment.addHealthCheck(new ExampleHealthCheck());
-        environment.addResource(new GameResource());
+        environment.addResource(new GameResource(new GameStore()));
         
     }
     
