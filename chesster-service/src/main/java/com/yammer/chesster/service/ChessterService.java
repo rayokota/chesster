@@ -1,5 +1,6 @@
 package com.yammer.chesster.service;
 
+import com.bazaarvoice.dropwizard.assets.ConfiguredAssetsBundle;
 import com.google.common.base.Optional;
 
 import com.yammer.dropwizard.assets.AssetsBundle;
@@ -33,10 +34,8 @@ public class ChessterService extends Service<ChessterConfiguration> {
 
     @Override
     public void initialize(Bootstrap<ChessterConfiguration> bootstrap) {
-        bootstrap.addBundle(new AssetsBundle());
+        bootstrap.addBundle(new ConfiguredAssetsBundle("/assets/", "/pgn4web/"));
         bootstrap.addBundle(new ViewBundle());
-        
-        
     }
 
     
