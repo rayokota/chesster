@@ -28,7 +28,7 @@
         <#list game.propertyEntrySet as prop>
         [${prop.key} "${prop.value}"]
         </#list>
-        ${game.movesAsString}
+        ${game.pgn}
 
     </textarea></form>
 

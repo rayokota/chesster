@@ -1,5 +1,11 @@
 package com.yammer.chesster.service.resources;
 
+import com.alonsoruibal.chess.Config;
+import com.alonsoruibal.chess.Move;
+import com.alonsoruibal.chess.Pgn;
+import com.alonsoruibal.chess.book.FileBook;
+import com.alonsoruibal.chess.search.SearchEngine;
+import com.alonsoruibal.chess.search.SearchParameters;
 import com.google.common.base.Optional;
 import com.yammer.chesster.service.model.Game;
 import com.yammer.chesster.service.store.GameStore;
@@ -28,6 +34,17 @@ public class GameResource {
         return store.createGame(newGame);
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{id}")
+    public Game getGame(@PathParam("id") long id) {
+        Optional<Game> game = store.getGame(id);
+        if (!game.isPresent()) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        }
+        return game.get();
+    }
+
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}/moves/{move}")
@@ -49,5 +66,31 @@ public class GameResource {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
         return new BoardView(game.get());
+    }
+
+    @GET
+    @Path("/{id}/bestmove")
+    public String getBestMove(@PathParam("id") long id) {
+        Optional<Game> game = store.getGame(id);
+        if (!game.isPresent()) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        }
+        Config config = new Config();
+        config.setBook(new FileBook("book_small.bin"));
+        SearchEngine search = new SearchEngine(config);
+
+        Pgn pgn = new Pgn();
+        pgn.setBoard(search.getBoard(), game.get().getPgn());
+
+        search.go(SearchParameters.get(10000)); // 10 seconds max
+        String bestOperation = Move.toString(search.getBestMove());
+        return bestOperation;
+    }
+
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{id}/bestmove")
+    public Game makeBestMove(@PathParam("id") long id) {
+        return addMove(id, getBestMove(id));
     }
 }

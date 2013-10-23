@@ -60,7 +60,7 @@ public class Game {
     }
 
     @JsonIgnore
-    public String getMovesAsString() {
+    public String getPgn() {
         StringBuilder sb = new StringBuilder();
         int i = 0;
         for (String move : moves) {
