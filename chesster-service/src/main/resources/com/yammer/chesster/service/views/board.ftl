@@ -25,6 +25,9 @@
 <body>
     <form style="display: none;"><textarea style="display: none;" id="pgnText">
 
+        <#list game.propertyEntrySet as prop>
+        [${prop.key} "${prop.value}"]
+        </#list>
         ${game.movesAsString}
 
     </textarea></form>

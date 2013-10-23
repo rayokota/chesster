@@ -1,5 +1,6 @@
 package com.yammer.chesster.service.resources;
 
+import com.google.common.base.Optional;
 import com.yammer.chesster.service.model.Game;
 import com.yammer.chesster.service.store.GameStore;
 import com.yammer.chesster.service.views.BoardView;
@@ -31,13 +32,22 @@ public class GameResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}/moves/{move}")
     public Game addMove(@PathParam("id") long id, @PathParam("move") String move) {
-        return store.addMove(id, move);
+        Optional<Game> game = store.getGame(id);
+        if (!game.isPresent()) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        }
+        game.get().addMove(move);
+        return game.get();
     }
 
     @Produces(MediaType.TEXT_HTML)
     @GET
     @Path("/{id}/board")
     public BoardView showBoard(@PathParam("id") long id) {
-        return new BoardView(store.getGame(id));
+        Optional<Game> game = store.getGame(id);
+        if (!game.isPresent()) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        }
+        return new BoardView(game.get());
     }
 }

@@ -1,5 +1,6 @@
 package com.yammer.chesster.service.store;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Maps;
@@ -19,19 +20,14 @@ public class GameStore {
     }
 
     public Game createGame(Game game) {
-        long id = ids.incrementAndGet();
+        long id = game.getId();
+        if (id < 0) id = ids.incrementAndGet();
         game.setId(id);
         games.put(id, game);
         return game;
     }
 
-    public Game getGame(long id) {
-        return games.get(id);
-    }
-
-    public Game addMove(long id, String move) {
-        Game game = games.get(id);
-        game.addMove(move);
-        return game;
+    public Optional<Game> getGame(long id) {
+        return Optional.of(games.get(id));
     }
 }

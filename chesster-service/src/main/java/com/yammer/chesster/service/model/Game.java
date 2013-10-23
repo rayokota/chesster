@@ -1,13 +1,15 @@
 package com.yammer.chesster.service.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class Game {
-    private long id;
+    private long id = -1;
     private Map<String, String> properties = Maps.newHashMap();
     private List<String> moves = Lists.newArrayList();
 
@@ -52,6 +54,12 @@ public class Game {
         moves.add(move);
     }
 
+    @JsonIgnore
+    public Set<Map.Entry<String, String>> getPropertyEntrySet() {
+        return properties.entrySet();
+    }
+
+    @JsonIgnore
     public String getMovesAsString() {
         StringBuilder sb = new StringBuilder();
         int i = 0;
