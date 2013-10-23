@@ -92,11 +92,12 @@ public class GameResource {
     @Produces(MediaType.TEXT_HTML)
     @GET
     @Path("/{id}/board")
-    public BoardView showBoard(@PathParam("id") long id) {
+    public BoardView showBoard(@PathParam("id") long id,
+                               @DefaultValue("0") @QueryParam("playerId") long playerId) {
         Optional<Game> game = store.getGame(id);
         if (!game.isPresent()) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
-        return new BoardView(game.get());
+        return new BoardView(game.get(), playerId);
     }
 }

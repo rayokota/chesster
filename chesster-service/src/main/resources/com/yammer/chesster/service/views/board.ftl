@@ -69,6 +69,12 @@
         //    .addClass('highlight-black');
         //};
 
+        var onMoveEnd = function(oldPos, newPos) {
+          if (parent.onMoveEnd) {
+              parent.onMoveEnd(oldPos, newPos);
+          }
+        };
+
         // update the board position after the piece snap
         // for castling, en passant, pawn promotion
         var onSnapEnd = function() {
@@ -80,8 +86,10 @@
           position: '${game.fen}',
           onDragStart: onDragStart,
           onDrop: onDrop,
-          //onMoveEnd: onMoveEnd,
+          onMoveEnd: onMoveEnd,
           onSnapEnd: onSnapEnd,
+          orientation: '${orientation}',
+          showNotation: false,
           pieceTheme: '/assets/board/img/chesspieces/alpha/{piece}.png'
         };
         board = new ChessBoard('board', cfg);
