@@ -24,7 +24,7 @@
         }
     </style>
 
-    <div id="board" style="width: 60%"></div>
+    <div id="board" style="width: 100%"></div>
 
     <script type="text/javascript">
         var init = function() {
