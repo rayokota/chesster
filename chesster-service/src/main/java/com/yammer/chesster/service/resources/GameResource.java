@@ -53,8 +53,27 @@ public class GameResource {
         if (!game.isPresent()) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
-        game.get().addMove(move);
+        if (!game.get().addMove(move)) {
+            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+        }
         return game.get();
+    }
+
+    @GET
+    @Path("/{id}/bestmove")
+    public String getBestMove(@PathParam("id") long id) {
+        Optional<Game> game = store.getGame(id);
+        if (!game.isPresent()) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        }
+        return game.get().getBestMove();
+    }
+
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{id}/bestmove")
+    public Game makeBestMove(@PathParam("id") long id) {
+        return addMove(id, getBestMove(id));
     }
 
     @Produces(MediaType.TEXT_HTML)
@@ -66,31 +85,5 @@ public class GameResource {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
         return new BoardView(game.get());
-    }
-
-    @GET
-    @Path("/{id}/bestmove")
-    public String getBestMove(@PathParam("id") long id) {
-        Optional<Game> game = store.getGame(id);
-        if (!game.isPresent()) {
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
-        }
-        Config config = new Config();
-        config.setBook(new FileBook("book_small.bin"));
-        SearchEngine search = new SearchEngine(config);
-
-        Pgn pgn = new Pgn();
-        pgn.setBoard(search.getBoard(), game.get().getPgn());
-
-        search.go(SearchParameters.get(10000)); // 10 seconds max
-        String bestOperation = Move.toString(search.getBestMove());
-        return bestOperation;
-    }
-
-    @PUT
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/{id}/bestmove")
-    public Game makeBestMove(@PathParam("id") long id) {
-        return addMove(id, getBestMove(id));
     }
 }
