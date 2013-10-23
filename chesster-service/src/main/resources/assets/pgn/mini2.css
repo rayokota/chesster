@@ -20,7 +20,7 @@ body {
 .boardTable {
   border-style: double;
   border-color: black;
-  border-width: 3px;
+  border-width: 2px;
 }
 
 .pieceImage {
@@ -38,17 +38,17 @@ body {
 
 .whiteSquare,
 .highlightWhiteSquare {
-  background: #EFF4EC;
+  background: #f0d9b5;
 }
 
 .blackSquare,
 .highlightBlackSquare {
-  background: #C6CEC3;
+  background: #b58863;
 }
 
 .highlightWhiteSquare,
 .highlightBlackSquare {
-  background: #DAF4D7;
+  background: yellow;
 }
 
 .selectControl {

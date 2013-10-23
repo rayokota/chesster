@@ -10,6 +10,7 @@ import com.google.common.base.Optional;
 import com.yammer.chesster.service.model.Game;
 import com.yammer.chesster.service.store.GameStore;
 import com.yammer.chesster.service.views.BoardView;
+import com.yammer.chesster.service.views.PgnView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,6 +75,18 @@ public class GameResource {
     @Path("/{id}/bestmove")
     public Game makeBestMove(@PathParam("id") long id) {
         return addMove(id, getBestMove(id));
+    }
+
+
+    @Produces(MediaType.TEXT_HTML)
+    @GET
+    @Path("/{id}/pgn")
+    public PgnView showPgnViewer(@PathParam("id") long id) {
+        Optional<Game> game = store.getGame(id);
+        if (!game.isPresent()) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        }
+        return new PgnView(game.get());
     }
 
     @Produces(MediaType.TEXT_HTML)

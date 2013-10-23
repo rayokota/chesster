@@ -28,6 +28,6 @@ public class GameStore {
     }
 
     public Optional<Game> getGame(long id) {
-        return Optional.of(games.get(id));
+        return Optional.fromNullable(games.get(id));
     }
 }

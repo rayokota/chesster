@@ -70,6 +70,17 @@ public class Game {
         return pgn.getPgn(searchEngine.getBoard(), getProperty("white"), getProperty("black"));
     }
 
+    @JsonIgnore
+    public String getPgnMoves() {
+        Pgn pgn = new Pgn();
+        return pgn.getPgnMoves(searchEngine.getBoard());
+    }
+
+    @JsonIgnore
+    public String getFen() {
+        return searchEngine.getBoard().getFen();
+    }
+
     /*
     @JsonIgnore
     public String getPgn() {

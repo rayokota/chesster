@@ -2,40 +2,94 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link href="/assets/pgn/mini2.css" type="text/css" rel="stylesheet" />
-    <link rel="shortcut icon" href="/assets/pgn/pawn.ico" />
-    <script src="/assets/pgn/pgn4web.js" type="text/javascript"></script>
-    <script type="text/javascript">
-        "use strict";
-
-        SetImagePath("/assets/pgn/images");
-        SetImageType("png");
-        SetHighlightOption(true); // true or false
-        SetCommentsIntoMoveText(false);
-        SetCommentsOnSeparateLines(false);
-        SetAutoplayDelay(1000); // milliseconds
-        SetAutostartAutoplay(false);
-        SetAutoplayNextGame(false); // if set, move to the next game at the end of the current game during autoplay
-        SetInitialGame(1); // number of game to be shown at load, from 1 (default); values (keep the quotes) of "first", "last", "random" are accepted; other string values assumed as PGN search string
-        SetInitialVariation(0); // number for the variation to be shown at load, 0 (default) for main variation
-        SetInitialHalfmove("end",false); // halfmove number to be shown at load, 0 (default) for start position; values (keep the quotes) of "start", "end", "random", "comment" (go to first comment or variation), "variation" (go to the first variation) are also accepted. Second parameter if true applies the setting to every selected game instead of startup only (default)
-        SetShortcutKeysEnabled(false);
-    </script>
+    <link rel="stylesheet" href="/assets/board/css/chessboard.css" />
 </head>
 <body>
-    <form style="display: none;"><textarea style="display: none;" id="pgnText">
+    <script src="/assets/board/js/json3.min.js"></script>
+    <script src="/assets/board/js/jquery-1.10.1.min.js"></script>
+    <script src="/assets/board/js/prettify.js"></script>
+    <script src="/assets/board/js/chessboard.js"></script>
+    <script src="/assets/board/js/chess.js"></script>
 
-        ${game.pgn}
+    <style type="text/css">
+        .highlight-white {
+            -webkit-box-shadow: inset 0 0 3px 3px yellow;
+            -moz-box-shadow: inset 0 0 3px 3px yellow;
+            box-shadow: inset 0 0 3px 3px yellow;
+        }
+        .highlight-black {
+            -webkit-box-shadow: inset 0 0 3px 3px blue;
+            -moz-box-shadow: inset 0 0 3px 3px blue;
+            box-shadow: inset 0 0 3px 3px blue;
+        }
+    </style>
 
-    </textarea></form>
+    <div id="board" style="width: 60%"></div>
 
-    <center>
-        <b><span id="GameWhite"></span>&nbsp;-&nbsp;<span id="GameBlack"></span></b>
-        <p></p>
-        <div id="GameBoard"></div>
-        <p></p>
-        <div id="GameButtons"></div>
-    </center>
+    <script type="text/javascript">
+        var init = function() {
+        var board,
+          boardEl = $('#board'),
+          game = new Chess(),
+          squareToHighlight;
 
+        var removeHighlights = function(color) {
+          boardEl.find('.square-55d63')
+            .removeClass('highlight-' + color);
+        };
+
+        // do not pick up pieces if the game is over
+        // only pick up pieces for White
+        var onDragStart = function(source, piece, position, orientation) {
+          if (game.in_checkmate() === true || game.in_draw() === true ||
+            piece.search(/^b/) !== -1) {
+            return false;
+          }
+        };
+
+        var onDrop = function(source, target) {
+          // see if the move is legal
+          var move = game.move({
+            from: source,
+            to: target,
+            promotion: 'q' // NOTE: always promote to a pawn for example simplicity
+          });
+
+          // illegal move
+          if (move === null) return 'snapback';
+
+          // highlight white's move
+          removeHighlights('white');
+          boardEl.find('.square-' + source).addClass('highlight-white');
+          boardEl.find('.square-' + target).addClass('highlight-white');
+        };
+
+        //var onMoveEnd = function() {
+        //  boardEl.find('.square-' + squareToHighlight)
+        //    .addClass('highlight-black');
+        //};
+
+        // update the board position after the piece snap
+        // for castling, en passant, pawn promotion
+        var onSnapEnd = function() {
+          board.position(game.fen());
+        };
+
+        var cfg = {
+          draggable: true,
+          position: '${game.fen}',
+          onDragStart: onDragStart,
+          onDrop: onDrop,
+          //onMoveEnd: onMoveEnd,
+          onSnapEnd: onSnapEnd,
+          pieceTheme: '/assets/board/img/chesspieces/alpha/{piece}.png'
+        };
+        board = new ChessBoard('board', cfg);
+        game.load_pgn('${game.pgnMoves}');
+        $(window).resize(board.resize);
+
+        }; // end init()
+        $(document).ready(init);
+    </script>
 </body>
 </html>
