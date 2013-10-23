@@ -42,7 +42,7 @@
         // only pick up pieces for White
         var onDragStart = function(source, piece, position, orientation) {
           if (game.in_checkmate() === true || game.in_draw() === true ||
-            piece.search(/^b/) !== -1) {
+            piece.search(/^${opponentOrientation?substring(0,1)}/) !== -1) {
             return false;
           }
         };

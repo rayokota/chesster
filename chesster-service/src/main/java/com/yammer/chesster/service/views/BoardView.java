@@ -35,4 +35,8 @@ public class BoardView extends View {
         } catch (NumberFormatException e) {}
         return "white";
     }
+
+    public String getOpponentOrientation() {
+        return "white".equals(getOrientation()) ? "black" : "white";
+    }
 }
