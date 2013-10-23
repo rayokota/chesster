@@ -2,13 +2,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link href="/assets/mini.css" type="text/css" rel="stylesheet" />
-    <link rel="shortcut icon" href="/assets/pawn.ico" />
-    <script src="/assets/pgn4web.js" type="text/javascript"></script>
+    <link href="/assets/pgn/mini.css" type="text/css" rel="stylesheet" />
+    <link rel="shortcut icon" href="/assets/pgn/pawn.ico" />
+    <script src="/assets/pgn/pgn4web.js" type="text/javascript"></script>
     <script type="text/javascript">
         "use strict";
 
-        SetImagePath("/assets/images");
+        SetImagePath("/assets/pgn/images");
         SetImageType("png");
         SetHighlightOption(true); // true or false
         SetCommentsIntoMoveText(false);
