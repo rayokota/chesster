@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link href="/assets/mini.css" type="text/css" rel="stylesheet" />
+    <link href="/assets/mini2.css" type="text/css" rel="stylesheet" />
     <link rel="shortcut icon" href="/assets/pawn.ico" />
     <script src="/assets/pgn4web.js" type="text/javascript"></script>
     <script type="text/javascript">
