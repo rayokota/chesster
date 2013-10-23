@@ -32,6 +32,12 @@ public class GameResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/")
     public Game createGame(Game newGame) {
+        if (newGame.getId() > 0) {
+            Optional<Game> game = store.getGame(newGame.getId());
+            if (game.isPresent()) {
+                throw new WebApplicationException(Response.Status.CONFLICT);
+            }
+        }
         return store.createGame(newGame);
     }
 

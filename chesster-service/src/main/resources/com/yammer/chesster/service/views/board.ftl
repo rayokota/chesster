@@ -13,14 +13,14 @@
 
     <style type="text/css">
         .highlight-white {
-            -webkit-box-shadow: inset 0 0 3px 3px yellow;
-            -moz-box-shadow: inset 0 0 3px 3px yellow;
-            box-shadow: inset 0 0 3px 3px yellow;
+            -webkit-box-shadow: inset 0 0 2px 2px yellow;
+            -moz-box-shadow: inset 0 0 2px 2px yellow;
+            box-shadow: inset 0 0 2px 2px yellow;
         }
         .highlight-black {
-            -webkit-box-shadow: inset 0 0 3px 3px blue;
-            -moz-box-shadow: inset 0 0 3px 3px blue;
-            box-shadow: inset 0 0 3px 3px blue;
+            -webkit-box-shadow: inset 0 0 2px 2px blue;
+            -moz-box-shadow: inset 0 0 2px 2px blue;
+            box-shadow: inset 0 0 2px 2px blue;
         }
     </style>
 
@@ -62,18 +62,16 @@
           removeHighlights('white');
           boardEl.find('.square-' + source).addClass('highlight-white');
           boardEl.find('.square-' + target).addClass('highlight-white');
+
+          if (parent.onMove) {
+            parent.onMove(source, target);
+          }
         };
 
         //var onMoveEnd = function() {
         //  boardEl.find('.square-' + squareToHighlight)
         //    .addClass('highlight-black');
         //};
-
-        var onMoveEnd = function(oldPos, newPos) {
-          if (parent.onMoveEnd) {
-              parent.onMoveEnd(oldPos, newPos);
-          }
-        };
 
         // update the board position after the piece snap
         // for castling, en passant, pawn promotion
@@ -86,7 +84,6 @@
           position: '${game.fen}',
           onDragStart: onDragStart,
           onDrop: onDrop,
-          onMoveEnd: onMoveEnd,
           onSnapEnd: onSnapEnd,
           orientation: '${orientation}',
           showNotation: false,

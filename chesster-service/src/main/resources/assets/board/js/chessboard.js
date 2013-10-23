@@ -114,6 +114,7 @@ function fenToObj(fen) {
   var rows = fen.split('/');
   var position = {};
 
+
   var currentRow = 8;
   for (var i = 0; i < 8; i++) {
     var row = rows[i].split('');
