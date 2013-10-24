@@ -399,6 +399,15 @@ window['Chess'] = window['Chess'] || function(fen) {
     return (piece) ? {type: piece.type, color: piece.color} : null;
   }
 
+  // RAY: added
+  function get_square(position) {
+    for (var square in SQUARES) {
+      if (SQUARES[square] === position) {
+        return square;
+      }
+    }
+  }
+
   function put(piece, square) {
     /* check for valid piece object */
     if (!('type' in piece && 'color' in piece)) {
@@ -1636,6 +1645,19 @@ window['Chess'] = window['Chess'] || function(fen) {
       }
 
       return move_history;
+    },
+
+    // RAY: added
+    last_move: function() {
+      if (history.length == 0) return null;
+      var last = history[history.length - 1];
+      var from = get_square(last.move.from);
+      var to = get_square(last.move.to);
+      return {
+        turn: last.turn,
+        from: from,
+        to: to
+      }
     }
 
   };

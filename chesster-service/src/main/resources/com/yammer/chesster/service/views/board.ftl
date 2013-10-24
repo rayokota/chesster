@@ -34,6 +34,21 @@
           gameId = #{game.id},
           squareToHighlight;
 
+        var showHighlights = function(last_move) {
+            if (last_move) {
+                if (last_move.turn === 'w') {
+                    // highlight white's move
+                    removeHighlights('white');
+                    boardEl.find('.square-' + last_move.from).addClass('highlight-white');
+                    boardEl.find('.square-' + last_move.to).addClass('highlight-white');
+                } else {
+                    removeHighlights('black');
+                    boardEl.find('.square-' + last_move.from).addClass('highlight-black');
+                    boardEl.find('.square-' + last_move.to).addClass('highlight-black');
+                }
+            }
+        };
+
         var removeHighlights = function(color) {
           boardEl.find('.square-55d63')
             .removeClass('highlight-' + color);
@@ -92,6 +107,7 @@
         };
         board = new ChessBoard('board', cfg);
         game.load_pgn('${game.pgnMoves}');
+        showHighlights(game.last_move());
         $(window).resize(board.resize);
 
         function move(source, target) {
