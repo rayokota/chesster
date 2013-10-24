@@ -12,12 +12,12 @@
     <script src="/assets/board/js/chess.js"></script>
 
     <style type="text/css">
-        .highlight-white {
+        .highlight-bottom {
             -webkit-box-shadow: inset 0 0 2px 2px yellow;
             -moz-box-shadow: inset 0 0 2px 2px yellow;
             box-shadow: inset 0 0 2px 2px yellow;
         }
-        .highlight-black {
+        .highlight-top {
             -webkit-box-shadow: inset 0 0 2px 2px blue;
             -moz-box-shadow: inset 0 0 2px 2px blue;
             box-shadow: inset 0 0 2px 2px blue;
@@ -36,15 +36,14 @@
 
         var showHighlights = function(last_move) {
             if (last_move) {
-                if (last_move.turn === 'w') {
-                    // highlight white's move
-                    removeHighlights('white');
-                    boardEl.find('.square-' + last_move.from).addClass('highlight-white');
-                    boardEl.find('.square-' + last_move.to).addClass('highlight-white');
+                if (last_move.turn === '${orientation?substring(0,1)}') {
+                    removeHighlights('bottom');
+                    boardEl.find('.square-' + last_move.from).addClass('highlight-bottom');
+                    boardEl.find('.square-' + last_move.to).addClass('highlight-bottom');
                 } else {
-                    removeHighlights('black');
-                    boardEl.find('.square-' + last_move.from).addClass('highlight-black');
-                    boardEl.find('.square-' + last_move.to).addClass('highlight-black');
+                    removeHighlights('top');
+                    boardEl.find('.square-' + last_move.from).addClass('highlight-top');
+                    boardEl.find('.square-' + last_move.to).addClass('highlight-top');
                 }
             }
         };
@@ -75,9 +74,9 @@
           if (move === null) return 'snapback';
 
           // highlight white's move
-          removeHighlights('white');
-          boardEl.find('.square-' + source).addClass('highlight-white');
-          boardEl.find('.square-' + target).addClass('highlight-white');
+          removeHighlights('bottom');
+          boardEl.find('.square-' + source).addClass('highlight-bottom');
+          boardEl.find('.square-' + target).addClass('highlight-bottom');
 
           if (parent.onMove) {
             parent.onMove(gameId, source, target);
@@ -125,9 +124,9 @@
             board.move(source + "-" + target);
 
             // highlight white's move
-            removeHighlights('white');
-            boardEl.find('.square-' + source).addClass('highlight-white');
-            boardEl.find('.square-' + target).addClass('highlight-white');
+            removeHighlights('bottom');
+            boardEl.find('.square-' + source).addClass('highlight-bottom');
+            boardEl.find('.square-' + target).addClass('highlight-bottom');
 
             if (parent.onMove) {
                 parent.onMove(gameId, source, target);
