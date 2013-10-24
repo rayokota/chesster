@@ -27,7 +27,7 @@
     <div id="board" style="width: 100%"></div>
 
     <script type="text/javascript">
-        var init = function() {
+//        var init = function() {
         var board,
           boardEl = $('#board'),
           game = new Chess(),
@@ -93,8 +93,32 @@
         game.load_pgn('${game.pgnMoves}');
         $(window).resize(board.resize);
 
-        }; // end init()
-        $(document).ready(init);
+        function move(source, target) {
+            // see if the move is legal
+            var move = game.move({
+                from: source,
+                to: target,
+                promotion: 'q' // NOTE: always promote to a pawn for example simplicity
+            });
+
+            // illegal move
+            if (move === null) return;
+
+            // set move on board
+            board.move(source + "-" + target);
+
+            // highlight white's move
+            removeHighlights('white');
+            boardEl.find('.square-' + source).addClass('highlight-white');
+            boardEl.find('.square-' + target).addClass('highlight-white');
+
+            if (parent.onMove) {
+                parent.onMove(source, target);
+            }
+        };
+
+//        }; // end init()
+//        $(document).ready(init);
     </script>
 </body>
 </html>
