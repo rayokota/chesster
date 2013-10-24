@@ -9,7 +9,8 @@
 </head>
 <body>
 <script type="text/javascript">
-    function onMove(source, target) {
+    function onMove(gameId, source, target) {
+      console.log("gameId: " + gameId);
       console.log("oldPos: " + source);
       console.log("newPos: " + target);
     };

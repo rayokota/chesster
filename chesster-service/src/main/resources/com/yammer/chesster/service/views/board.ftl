@@ -31,6 +31,7 @@
         var board,
           boardEl = $('#board'),
           game = new Chess(),
+          gameId = #{game.id},
           squareToHighlight;
 
         var removeHighlights = function(color) {
@@ -64,7 +65,7 @@
           boardEl.find('.square-' + target).addClass('highlight-white');
 
           if (parent.onMove) {
-            parent.onMove(source, target);
+            parent.onMove(gameId, source, target);
           }
         };
 
@@ -113,7 +114,7 @@
             boardEl.find('.square-' + target).addClass('highlight-white');
 
             if (parent.onMove) {
-                parent.onMove(source, target);
+                parent.onMove(gameId, source, target);
             }
         };
 
