@@ -71,12 +71,6 @@ public class Game {
         properties.put(name, value);
     }
 
-    public boolean addMove(String moveString) {
-        Board board = searchEngine.getBoard();
-        int move = Move.getFromString(board, moveString, false);
-        return board.doMove(move, true);
-    }
-
     @Transient
     public GameState getGameState() {
         switch (searchEngine.getBoard().isEndGame()) {
@@ -115,30 +109,17 @@ public class Game {
         return searchEngine.getBoard().getFen();
     }
 
-    /*
-    @JsonIgnore
-    public String getPgn() {
-        StringBuilder sb = new StringBuilder();
-        int i = 0;
-        for (String move : moves) {
-            if (i % 2 == 0) {
-                sb.append(i / 2 + 1);
-                sb.append(". ");
-            }
-            sb.append(move);
-            sb.append(" ");
-            i++;
-        }
-        return sb.toString();
+    public boolean addMove(String moveString) {
+        Board board = searchEngine.getBoard();
+        int move = Move.getFromString(board, moveString, false);
+        return board.doMove(move, true);
     }
-    */
 
     @JsonIgnore
     @Transient
     public String getBestMove(int computerMoveTime) {
         searchEngine.go(SearchParameters.get(computerMoveTime));
-        String bestOperation = Move.toString(searchEngine.getBestMove());
-        return bestOperation;
+        return Move.toString(searchEngine.getBestMove());
     }
 
     @JsonIgnore

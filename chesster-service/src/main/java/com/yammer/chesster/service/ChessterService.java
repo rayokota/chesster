@@ -28,7 +28,6 @@ public class ChessterService extends Service<ChessterConfiguration> {
         }
     };
 
-
     public static void main(String[] args) throws Exception {
         new ChessterService().run(args);
     }
@@ -40,7 +39,6 @@ public class ChessterService extends Service<ChessterConfiguration> {
         bootstrap.addBundle(new ViewBundle());
     }
 
-    
     @Override
     public void run(final ChessterConfiguration config, Environment environment) throws Exception {
         //environment.addHealthCheck(new ExampleHealthCheck());
@@ -48,7 +46,4 @@ public class ChessterService extends Service<ChessterConfiguration> {
         environment.addResource(new GameResource(new GameStore(sessionFactory, true), config.getComputerMoveTimeMs()));
         
     }
-    
-
-    
 }

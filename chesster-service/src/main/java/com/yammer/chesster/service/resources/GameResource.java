@@ -10,6 +10,7 @@ import com.google.common.base.Optional;
 import com.yammer.chesster.service.model.Game;
 import com.yammer.chesster.service.store.GameStore;
 import com.yammer.chesster.service.views.BoardView;
+import com.yammer.chesster.service.views.ComputerBoardView;
 import com.yammer.chesster.service.views.PgnView;
 import com.yammer.dropwizard.hibernate.UnitOfWork;
 import org.slf4j.Logger;
@@ -128,11 +129,26 @@ public class GameResource {
     @Path("/{id}/board")
     @UnitOfWork
     public BoardView showBoard(@PathParam("id") long id,
-                               @DefaultValue("0") @QueryParam("playerId") long playerId) {
+                               @DefaultValue("0") @QueryParam("playerId") long playerId,
+                               @DefaultValue("100") @QueryParam("width") int width) {
         Optional<Game> game = store.getGame(id);
         if (!game.isPresent()) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
-        return new BoardView(game.get(), playerId);
+        return new BoardView(game.get(), playerId, width);
+    }
+
+    @Produces(MediaType.TEXT_HTML)
+    @GET
+    @Path("/{id}/computer")
+    @UnitOfWork
+    public ComputerBoardView showComputerBoard(@PathParam("id") long id,
+                                               @DefaultValue("0") @QueryParam("playerId") long playerId,
+                                               @DefaultValue("100") @QueryParam("width") int width) {
+        Optional<Game> game = store.getGame(id);
+        if (!game.isPresent()) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        }
+        return new ComputerBoardView(game.get(), playerId, width);
     }
 }

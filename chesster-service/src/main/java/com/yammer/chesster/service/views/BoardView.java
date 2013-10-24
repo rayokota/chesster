@@ -7,11 +7,13 @@ public class BoardView extends View {
 
     private Game game;
     private long playerId;
+    private int width;
 
-    public BoardView(Game game, long playerId) {
+    public BoardView(Game game, long playerId, int width) {
         super("board.ftl");
         this.game = game;
         this.playerId = playerId;
+        this.width = width;
     }
 
     public Game getGame() {
@@ -20,6 +22,10 @@ public class BoardView extends View {
 
     public long getPlayerId() {
         return playerId;
+    }
+
+    public int getWidth() {
+        return width;
     }
 
     public String getOrientation() {
