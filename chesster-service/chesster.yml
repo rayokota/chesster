@@ -1,4 +1,4 @@
-sampleProperty: hello!
+computerMoveTimeMs: 3000
 
 assets:
   overrides:

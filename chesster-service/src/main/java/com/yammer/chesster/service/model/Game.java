@@ -121,10 +121,21 @@ public class Game {
 
     @JsonIgnore
     @Transient
-    public String getBestMove() {
-        searchEngine.go(SearchParameters.get(10000)); // 10 seconds max
+    public String getBestMove(int computerMoveTime) {
+        searchEngine.go(SearchParameters.get(computerMoveTime));
         String bestOperation = Move.toString(searchEngine.getBestMove());
         return bestOperation;
+    }
+
+    @JsonIgnore
+    @Transient
+    public boolean isComputersTurn() {
+        String whiteId = getProperty("whiteId");
+        String blackId = getProperty("blackId");
+        boolean isWhiteComputer = whiteId == null || Long.parseLong(whiteId) < 0;
+        boolean isBlackComputer = blackId == null || Long.parseLong(blackId) < 0;
+        boolean isWhitesTurn = searchEngine.getBoard().getTurn();
+        return (isWhitesTurn && isWhiteComputer) || (!isWhitesTurn && isBlackComputer);
     }
 
     @Override

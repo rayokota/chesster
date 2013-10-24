@@ -15,7 +15,7 @@ public class ChessterConfiguration extends Configuration implements AssetsBundle
 
     @NotNull
     @JsonProperty
-    private String sampleProperty;
+    private int computerMoveTimeMs;
 
     @NotNull
     @JsonProperty
@@ -25,8 +25,8 @@ public class ChessterConfiguration extends Configuration implements AssetsBundle
     @JsonProperty
     private DatabaseConfiguration database = new DatabaseConfiguration();
 
-    public String getSampleProperty() {
-        return sampleProperty;
+    public int getComputerMoveTimeMs() {
+        return computerMoveTimeMs;
     }
 
     public AssetsConfiguration getAssetsConfiguration() {

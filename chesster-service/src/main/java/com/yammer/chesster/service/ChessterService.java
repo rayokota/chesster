@@ -45,7 +45,7 @@ public class ChessterService extends Service<ChessterConfiguration> {
     public void run(final ChessterConfiguration config, Environment environment) throws Exception {
         //environment.addHealthCheck(new ExampleHealthCheck());
         final SessionFactory sessionFactory = hibernateBundle.getSessionFactory();
-        environment.addResource(new GameResource(new GameStore(sessionFactory, true)));
+        environment.addResource(new GameResource(new GameStore(sessionFactory, true), config.getComputerMoveTimeMs()));
         
     }
     

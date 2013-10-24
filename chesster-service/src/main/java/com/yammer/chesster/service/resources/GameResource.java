@@ -23,9 +23,11 @@ public class GameResource {
     private static final Logger LOG = LoggerFactory.getLogger(GameResource.class);
 
     private GameStore store;
+    private int computerMoveTimeMs;
 
-    public GameResource(GameStore store) {
+    public GameResource(GameStore store, int computerMoveTimeMs) {
         this.store = store;
+        this.computerMoveTimeMs = computerMoveTimeMs;
     }
 
     @POST
@@ -40,7 +42,11 @@ public class GameResource {
                 throw new WebApplicationException(Response.Status.CONFLICT);
             }
         }
-        return store.createGame(newGame);
+        Game g = store.createGame(newGame);
+        if (g.isComputersTurn()) {
+            g.addMove(g.getBestMove(computerMoveTimeMs));
+        }
+        return g;
     }
 
     @GET
@@ -67,7 +73,11 @@ public class GameResource {
         if (!game.get().addMove(move)) {
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
-        return game.get();
+        Game g = game.get();
+        if (g.isComputersTurn()) {
+            g.addMove(g.getBestMove(computerMoveTimeMs));
+        }
+        return g;
     }
 
     @DELETE
@@ -89,7 +99,7 @@ public class GameResource {
         if (!game.isPresent()) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
-        return game.get().getBestMove();
+        return game.get().getBestMove(computerMoveTimeMs);
     }
 
     @PUT
