@@ -3,6 +3,8 @@ package com.yammer.chesster.service;
 import com.bazaarvoice.dropwizard.assets.ConfiguredAssetsBundle;
 
 import com.yammer.chesster.service.model.Game;
+import com.yammer.chesster.service.model.GameProperty;
+import com.yammer.chesster.service.model.GamePropertyKey;
 import com.yammer.chesster.service.resources.GameResource;
 import com.yammer.chesster.service.store.GameStore;
 import com.yammer.dropwizard.config.Bootstrap;
@@ -21,7 +23,9 @@ public class ChessterService extends Service<ChessterConfiguration> {
     private static final Logger LOG = LoggerFactory.getLogger(Service.class);
 
     private final HibernateBundle<ChessterConfiguration> hibernateBundle = new HibernateBundle<ChessterConfiguration>(
-            Game.class) {
+            Game.class,
+            GameProperty.class
+    ) {
         @Override
         public DatabaseConfiguration getDatabaseConfiguration(ChessterConfiguration configuration) {
             return configuration.getDatabaseConfiguration();

@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.util.Set;
 
 @Path("/games")
 public class GameResource {
@@ -29,6 +30,18 @@ public class GameResource {
     public GameResource(GameStore store, int computerMoveTimeMs) {
         this.store = store;
         this.computerMoveTimeMs = computerMoveTimeMs;
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/")
+    @UnitOfWork
+    public Game getGameByThreadId(@DefaultValue("0") @QueryParam("threadId") long threadId) {
+        Set<Game> games = store.getGames("threadId", String.valueOf(threadId));
+        if (games.isEmpty()) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        }
+        return games.iterator().next();
     }
 
     @POST

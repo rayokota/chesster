@@ -24,7 +24,7 @@ public class Game {
     private Map<String, String> properties = Maps.newHashMap();
 
     @JsonIgnore
-    private SearchEngine searchEngine;
+    private transient SearchEngine searchEngine;
 
     public Game() {
         this.id = -1;
