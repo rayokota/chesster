@@ -29,6 +29,11 @@
         </dependency>
         <dependency>
             <groupId>com.yammer.dropwizard</groupId>
+            <artifactId>dropwizard-hibernate</artifactId>
+            <version>${dropwizard.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.yammer.dropwizard</groupId>
             <artifactId>dropwizard-views</artifactId>
             <version>${dropwizard.version}</version>
         </dependency>
@@ -37,7 +42,12 @@
             <artifactId>dropwizard-configurable-assets-bundle</artifactId>
             <version>0.1.11</version>
         </dependency>
-        
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derby</artifactId>
+            <version>10.10.1.1</version>
+        </dependency>
+
     </dependencies>
 
     <build>

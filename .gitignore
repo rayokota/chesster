@@ -5,6 +5,8 @@
 *.iws
 *.swp
 *~
+derby
+derby.log
 target
 .project
 .settings

@@ -6,6 +6,9 @@ import com.yammer.dropwizard.config.Configuration;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.yammer.dropwizard.db.DatabaseConfiguration;
+
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 public class ChessterConfiguration extends Configuration implements AssetsBundleConfiguration {
@@ -18,6 +21,10 @@ public class ChessterConfiguration extends Configuration implements AssetsBundle
     @JsonProperty
     private AssetsConfiguration assets;
 
+    @NotNull
+    @JsonProperty
+    private DatabaseConfiguration database = new DatabaseConfiguration();
+
     public String getSampleProperty() {
         return sampleProperty;
     }
@@ -26,4 +33,7 @@ public class ChessterConfiguration extends Configuration implements AssetsBundle
         return assets;
     }
 
+    public DatabaseConfiguration getDatabaseConfiguration() {
+        return database;
+    }
 }

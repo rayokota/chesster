@@ -4,6 +4,18 @@ assets:
   overrides:
     /assets: /tmp/files
 
+database:
+  driverClass: org.apache.derby.jdbc.EmbeddedDriver
+  url: jdbc:derby:derby/chesster;create=true
+  user:
+  password:
+  minSize: 8
+  maxSize: 20
+  properties:
+    hibernate.hbm2ddl.auto: update
+    hibernate.temp.use_jdbc_metadata_defaults: false
+    hibernate.dialect: org.hibernate.dialect.DerbyTenSevenDialect
+    hibernate.format_sql: true
 
 
 # HTTP-specific options.
@@ -126,7 +138,7 @@ http:
 logging:
 
   # The default level of all loggers. Can be OFF, FATAL, ERROR, WARN, INFO, DEBUG, TRACE, or ALL.
-  level: INFO
+  level: DEBUG
 
   # Logger-specific levels.
   loggers:

@@ -11,17 +11,24 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import javax.persistence.*;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
+@Entity
+@Table(name = "games")
 public class Game {
-    private long id = -1;
+    private long id;
     private Map<String, String> properties = Maps.newHashMap();
+
     @JsonIgnore
     private SearchEngine searchEngine;
 
     public Game() {
+        this.id = -1;
+        this.properties = Maps.newHashMap();
         Config config = new Config();
         config.setBook(new FileBook("book_small.bin"));
         searchEngine = new SearchEngine(config);
@@ -35,6 +42,7 @@ public class Game {
         searchEngine = new SearchEngine(config);
     }
 
+    @Id
     public long getId() {
         return id;
     }
@@ -43,6 +51,9 @@ public class Game {
         this.id = id;
     }
 
+    @ElementCollection(fetch=FetchType.EAGER)
+    @CollectionTable(name="game_properties", joinColumns=@JoinColumn(name="game_id"))
+    @Column(name="properties")
     public Map<String, String> getProperties() {
         return properties;
     }
@@ -51,6 +62,7 @@ public class Game {
         this.properties = props;
     }
 
+    @Transient
     public String getProperty(String name) {
         return properties.get(name);
     }
@@ -65,18 +77,26 @@ public class Game {
         return board.doMove(move, true);
     }
 
+    @Transient
     public String getPgn() {
         Pgn pgn = new Pgn();
         return pgn.getPgn(searchEngine.getBoard(), getProperty("white"), getProperty("black"));
     }
 
     @JsonIgnore
+    @Column(name="pgn")
     public String getPgnMoves() {
         Pgn pgn = new Pgn();
         return pgn.getPgnMoves(searchEngine.getBoard());
     }
 
+    public void setPgnMoves(String pgnMoves) {
+        Pgn pgn = new Pgn();
+        pgn.setBoard(searchEngine.getBoard(), pgnMoves);
+    }
+
     @JsonIgnore
+    @Transient
     public String getFen() {
         return searchEngine.getBoard().getFen();
     }
@@ -100,9 +120,23 @@ public class Game {
     */
 
     @JsonIgnore
+    @Transient
     public String getBestMove() {
         searchEngine.go(SearchParameters.get(10000)); // 10 seconds max
         String bestOperation = Move.toString(searchEngine.getBestMove());
         return bestOperation;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Game)) return false;
+        Game that = (Game) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
