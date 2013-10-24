@@ -78,6 +78,20 @@ public class Game {
     }
 
     @Transient
+    public GameState getGameState() {
+        switch (searchEngine.getBoard().isEndGame()) {
+            case 1:
+                return GameState.WHITE_WON;
+            case -1:
+                return GameState.BLACK_WON;
+            case 99:
+                return GameState.DRAW;
+            default:
+                return GameState.IN_PROGRESS;
+        }
+    }
+
+    @Transient
     public String getPgn() {
         Pgn pgn = new Pgn();
         return pgn.getPgn(searchEngine.getBoard(), getProperty("white"), getProperty("black"));
