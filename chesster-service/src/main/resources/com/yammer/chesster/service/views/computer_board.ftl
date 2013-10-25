@@ -12,10 +12,11 @@
           console.log("gameId: " + gameId);
           console.log("oldPos: " + source);
           console.log("newPos: " + target);
-          $.post("/games/" + gameId + "/moves/" + source + "-" + target, function() {
-              window.frames["board"].location.reload();
-          });
-          //window.frames["board"].move("a7", "a5");
+          $.post("/games/" + gameId + "/moves/" + source + "-" + target, function(data) {
+              //window.frames["board"].location.reload();
+              var lastMove = data.lastMove;
+              window.frames["board"].move(data.lastMove.substring(0, 2), data.lastMove.substring(2, 4));
+          }, "json");
         };
     </script>
 <iframe name="board" src="/games/${game.id}/board?playerId=${playerId}" height="500" width="500"></iframe>
