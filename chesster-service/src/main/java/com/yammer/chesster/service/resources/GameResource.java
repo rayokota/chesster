@@ -13,6 +13,7 @@ import com.yammer.chesster.service.views.BoardView;
 import com.yammer.chesster.service.views.ComputerBoardView;
 import com.yammer.chesster.service.views.PgnView;
 import com.yammer.dropwizard.hibernate.UnitOfWork;
+import com.yammer.metrics.annotation.Timed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,8 +35,8 @@ public class GameResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/")
     @UnitOfWork
+    @Timed
     public Game getGameByThreadId(@DefaultValue("0") @QueryParam("threadId") long threadId) {
         Set<Game> games = store.getGames("threadId", String.valueOf(threadId));
         if (games.isEmpty()) {
@@ -47,8 +48,8 @@ public class GameResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/")
     @UnitOfWork
+    @Timed
     public Game createGame(Game newGame) {
         if (newGame.getId() > 0) {
             Optional<Game> game = store.getGame(newGame.getId());
@@ -67,6 +68,7 @@ public class GameResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}")
     @UnitOfWork
+    @Timed
     public Game getGame(@PathParam("id") long id) {
         Optional<Game> game = store.getGame(id);
         if (!game.isPresent()) {
@@ -79,6 +81,7 @@ public class GameResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}/moves/{move}")
     @UnitOfWork
+    @Timed
     public Game addMove(@PathParam("id") long id, @PathParam("move") String move) {
         Optional<Game> game = store.getGame(id);
         if (!game.isPresent()) {
@@ -97,6 +100,7 @@ public class GameResource {
     @DELETE
     @Path("/{id}")
     @UnitOfWork
+    @Timed
     public void deleteGame(@PathParam("id") long id) {
         Optional<Game> game = store.getGame(id);
         if (!game.isPresent()) {
@@ -108,6 +112,7 @@ public class GameResource {
     @GET
     @Path("/{id}/bestmove")
     @UnitOfWork
+    @Timed
     public String getBestMove(@PathParam("id") long id) {
         Optional<Game> game = store.getGame(id);
         if (!game.isPresent()) {
@@ -120,6 +125,7 @@ public class GameResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}/bestmove")
     @UnitOfWork
+    @Timed
     public Game makeBestMove(@PathParam("id") long id) {
         return addMove(id, getBestMove(id));
     }
@@ -129,6 +135,7 @@ public class GameResource {
     @GET
     @Path("/{id}/pgn")
     @UnitOfWork
+    @Timed
     public PgnView showPgnViewer(@PathParam("id") long id) {
         Optional<Game> game = store.getGame(id);
         if (!game.isPresent()) {
@@ -141,6 +148,7 @@ public class GameResource {
     @GET
     @Path("/{id}/board")
     @UnitOfWork
+    @Timed
     public BoardView showBoard(@PathParam("id") long id,
                                @DefaultValue("0") @QueryParam("playerId") long playerId,
                                @DefaultValue("100") @QueryParam("width") int width) {
@@ -155,6 +163,7 @@ public class GameResource {
     @GET
     @Path("/{id}/computer")
     @UnitOfWork
+    @Timed
     public ComputerBoardView showComputerBoard(@PathParam("id") long id,
                                                @DefaultValue("0") @QueryParam("playerId") long playerId,
                                                @DefaultValue("100") @QueryParam("width") int width) {

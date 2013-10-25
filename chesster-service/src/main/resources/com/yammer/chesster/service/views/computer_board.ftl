@@ -1,4 +1,5 @@
 <#-- @ftlvariable name="" type="com.yammer.chesster.service.views.ComputerBoardView" -->
+<#setting number_format="computer">
 <!DOCTYPE html>
 <html lang="en">
 <head>

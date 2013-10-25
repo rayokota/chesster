@@ -8,6 +8,7 @@ import com.alonsoruibal.chess.book.FileBook;
 import com.alonsoruibal.chess.search.SearchEngine;
 import com.alonsoruibal.chess.search.SearchParameters;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -71,6 +72,7 @@ public class Game {
         properties.put(name, value);
     }
 
+    @JsonProperty
     @Transient
     public GameState getGameState() {
         switch (searchEngine.getBoard().isEndGame()) {
@@ -85,6 +87,7 @@ public class Game {
         }
     }
 
+    @JsonProperty
     @Transient
     public String getPgn() {
         Pgn pgn = new Pgn();
@@ -120,6 +123,23 @@ public class Game {
     public String getBestMove(int computerMoveTime) {
         searchEngine.go(SearchParameters.get(computerMoveTime));
         return Move.toString(searchEngine.getBestMove());
+    }
+
+    @JsonProperty
+    @Transient
+    public String getLastMove() {
+        Board board = searchEngine.getBoard();
+        return Move.toString(board.getLastMove());
+    }
+
+    @JsonProperty
+    @Transient
+    public boolean isComputer() {
+        String whiteId = getProperty("whiteId");
+        String blackId = getProperty("blackId");
+        boolean isWhiteComputer = whiteId == null || Long.parseLong(whiteId) < 0;
+        boolean isBlackComputer = blackId == null || Long.parseLong(blackId) < 0;
+        return isWhiteComputer || isBlackComputer;
     }
 
     @JsonIgnore
