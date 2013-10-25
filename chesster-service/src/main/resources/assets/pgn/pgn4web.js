@@ -3595,7 +3595,23 @@ function PrintHTML() {
   // game result
 
   if (theObj = document.getElementById("GameResult")) {
-    theObj.innerHTML = gameResult[currentGame];
+    // RAY: added
+    var result = gameResult[currentGame];
+    switch (result) {
+        case "1-0":
+            result = "White Wins";
+            break;
+        case "0-1":
+            result = "Black Wins";
+            break;
+        case "1/2-1/2":
+            result = "Draw";
+            break;
+        default:
+            result = "";
+            break;
+    }
+    theObj.innerHTML = result;
     theObj.style.whiteSpace = "nowrap";
   }
 

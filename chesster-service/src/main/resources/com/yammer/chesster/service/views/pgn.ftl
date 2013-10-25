@@ -30,7 +30,9 @@
     </textarea></form>
 
     <center>
-        <b><span id="GameWhite"></span>&nbsp;-&nbsp;<span id="GameBlack"></span>&nbsp;&nbsp;<span id="GameResult"></span></b>
+        <b><span id="GameWhite"></span>&nbsp;vs.&nbsp;<span id="GameBlack"></span></b>
+        <p></p>
+        <b><span id="GameResult"></span></b>
         <p></p>
         <div id="GameBoard"></div>
         <p></p>
