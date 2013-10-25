@@ -109,7 +109,7 @@
         showHighlights(game.last_move());
         $(window).resize(board.resize);
 
-        function move(source, target) {
+        function move(source, target, side) {
             // see if the move is legal
             var move = game.move({
                 from: source,
@@ -124,9 +124,9 @@
             board.move(source + "-" + target);
 
             // highlight white's move
-            removeHighlights('bottom');
-            boardEl.find('.square-' + source).addClass('highlight-bottom');
-            boardEl.find('.square-' + target).addClass('highlight-bottom');
+            removeHighlights(side);
+            boardEl.find('.square-' + source).addClass('highlight-' + side);
+            boardEl.find('.square-' + target).addClass('highlight-' + side);
 
             if (parent.onMove) {
                 parent.onMove(gameId, source, target);

@@ -15,7 +15,7 @@
           $.post("/games/" + gameId + "/moves/" + source + "-" + target, function(data) {
               if (data.computer) {
                 var lastMove = data.lastMove;
-                window.frames["board"].move(data.lastMove.substring(0, 2), data.lastMove.substring(2, 4));
+                window.frames["board"].move(data.lastMove.substring(0, 2), data.lastMove.substring(2, 4), 'top');
               }
               //window.frames["board"].location.reload();
           }, "json");
