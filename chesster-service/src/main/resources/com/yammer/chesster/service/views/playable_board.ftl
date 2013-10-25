@@ -1,4 +1,4 @@
-<#-- @ftlvariable name="" type="com.yammer.chesster.service.views.ComputerBoardView" -->
+<#-- @ftlvariable name="" type="com.yammer.chesster.service.views.PlayableBoardView" -->
 <#setting number_format="computer">
 <!DOCTYPE html>
 <html lang="en">
@@ -13,9 +13,11 @@
           console.log("oldPos: " + source);
           console.log("newPos: " + target);
           $.post("/games/" + gameId + "/moves/" + source + "-" + target, function(data) {
+              if (data.computer) {
+                var lastMove = data.lastMove;
+                window.frames["board"].move(data.lastMove.substring(0, 2), data.lastMove.substring(2, 4));
+              }
               //window.frames["board"].location.reload();
-              var lastMove = data.lastMove;
-              window.frames["board"].move(data.lastMove.substring(0, 2), data.lastMove.substring(2, 4));
           }, "json");
         };
     </script>

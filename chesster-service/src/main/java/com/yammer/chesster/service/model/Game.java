@@ -118,6 +118,11 @@ public class Game {
         return board.doMove(move, true);
     }
 
+    public void undoMove() {
+        Board board = searchEngine.getBoard();
+        board.undoMove();
+    }
+
     @JsonIgnore
     @Transient
     public String getBestMove(int computerMoveTime) {

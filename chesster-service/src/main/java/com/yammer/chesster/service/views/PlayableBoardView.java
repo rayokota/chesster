@@ -3,14 +3,14 @@ package com.yammer.chesster.service.views;
 import com.yammer.chesster.service.model.Game;
 import com.yammer.dropwizard.views.View;
 
-public class ComputerBoardView extends View {
+public class PlayableBoardView extends View {
 
     private Game game;
     private long playerId;
     private int width;
 
-    public ComputerBoardView(Game game, long playerId, int width) {
-        super("computer_board.ftl");
+    public PlayableBoardView(Game game, long playerId, int width) {
+        super("playable_board.ftl");
         this.game = game;
         this.playerId = playerId;
         this.width = width;

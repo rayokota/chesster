@@ -3596,6 +3596,7 @@ function PrintHTML() {
 
   if (theObj = document.getElementById("GameResult")) {
     // RAY: added
+    /*
     var result = gameResult[currentGame];
     switch (result) {
         case "1-0":
@@ -3612,6 +3613,8 @@ function PrintHTML() {
             break;
     }
     theObj.innerHTML = result;
+    */
+    theObj.innerHTML = gameResult[currentGame];
     theObj.style.whiteSpace = "nowrap";
   }
 

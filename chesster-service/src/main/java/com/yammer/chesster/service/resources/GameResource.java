@@ -1,16 +1,10 @@
 package com.yammer.chesster.service.resources;
 
-import com.alonsoruibal.chess.Config;
-import com.alonsoruibal.chess.Move;
-import com.alonsoruibal.chess.Pgn;
-import com.alonsoruibal.chess.book.FileBook;
-import com.alonsoruibal.chess.search.SearchEngine;
-import com.alonsoruibal.chess.search.SearchParameters;
 import com.google.common.base.Optional;
 import com.yammer.chesster.service.model.Game;
 import com.yammer.chesster.service.store.GameStore;
 import com.yammer.chesster.service.views.BoardView;
-import com.yammer.chesster.service.views.ComputerBoardView;
+import com.yammer.chesster.service.views.PlayableBoardView;
 import com.yammer.chesster.service.views.PgnView;
 import com.yammer.dropwizard.hibernate.UnitOfWork;
 import com.yammer.metrics.annotation.Timed;
@@ -77,6 +71,18 @@ public class GameResource {
         return game.get();
     }
 
+    @DELETE
+    @Path("/{id}")
+    @UnitOfWork
+    @Timed
+    public void deleteGame(@PathParam("id") long id) {
+        Optional<Game> game = store.getGame(id);
+        if (!game.isPresent()) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        }
+        store.deleteGame(game.get());
+    }
+
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}/moves/{move}")
@@ -97,16 +103,22 @@ public class GameResource {
         return g;
     }
 
-    @DELETE
-    @Path("/{id}")
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{id}/undomove")
     @UnitOfWork
     @Timed
-    public void deleteGame(@PathParam("id") long id) {
+    public Game undoMove(@PathParam("id") long id) {
         Optional<Game> game = store.getGame(id);
         if (!game.isPresent()) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
-        store.deleteGame(game.get());
+        Game g = game.get();
+        g.undoMove();
+        if (g.isComputersTurn()) {
+            g.undoMove();
+        }
+        return g;
     }
 
     @GET
@@ -120,16 +132,6 @@ public class GameResource {
         }
         return game.get().getBestMove(computerMoveTimeMs);
     }
-
-    @PUT
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/{id}/bestmove")
-    @UnitOfWork
-    @Timed
-    public Game makeBestMove(@PathParam("id") long id) {
-        return addMove(id, getBestMove(id));
-    }
-
 
     @Produces(MediaType.TEXT_HTML)
     @GET
@@ -161,16 +163,16 @@ public class GameResource {
 
     @Produces(MediaType.TEXT_HTML)
     @GET
-    @Path("/{id}/computer")
+    @Path("/{id}/play")
     @UnitOfWork
     @Timed
-    public ComputerBoardView showComputerBoard(@PathParam("id") long id,
+    public PlayableBoardView showPlayableBoard(@PathParam("id") long id,
                                                @DefaultValue("0") @QueryParam("playerId") long playerId,
                                                @DefaultValue("100") @QueryParam("width") int width) {
         Optional<Game> game = store.getGame(id);
         if (!game.isPresent()) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
-        return new ComputerBoardView(game.get(), playerId, width);
+        return new PlayableBoardView(game.get(), playerId, width);
     }
 }
